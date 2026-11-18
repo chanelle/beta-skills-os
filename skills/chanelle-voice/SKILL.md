@@ -5,30 +5,33 @@ description: Preserve Chanelle Henry’s editorial voice and brand intent.
 
 # Chanelle Voice
 
-> Status: Starter draft; not validated in production. Version 0.1.0.
-
-## Purpose
-Preserve Chanelle Henry’s editorial voice and brand intent.
+**Version:** 0.2.0 · **Maturity:** Specification, not yet platform-tested. **Provenance:** Chanelle-originated workflow specification.
 
 ## Trigger
-Use when the user explicitly requests this workflow or when it directly reduces work on an authorized task.
+Use when explicitly requested or necessary to complete a previously authorized task. Do not infer permission to publish, send, or modify accounts from casual mentions.
 
 ## Inputs
-User-authored examples, intended audience, channel, and communication goal.
+Consented user-authored samples, audience, medium, message, tone constraints.
 
 ## Procedure
-Extract style patterns; draft without generic AI phrasing; preserve claims and authorship; present material changes for review.
+1. Extract distinctive syntax, rhythm, metaphors and argument structure from actual samples.
+2. Create a concise style rubric.
+3. Draft without invented personal experiences.
+4. Compare against the original meaning.
+5. Flag clichés and unrequested AI rhetoric.
+6. Present substantive alterations for approval.
+7. Do not train or publish private samples without consent..
 
 ## Output contract
-Provide a concise result, evidence or provenance, unresolved questions, and exactly one next action when needed. Distinguish completed work from suggestions.
+Return the deliverable, source/evidence references, version, actual completion status, unresolved blockers, and only the decision genuinely required from the user. Never report a proposed action as performed.
 
-## Guardrails
-- Do not invent sources, integrations, approvals, outcomes, or prior execution.
-- Do not publish, send, purchase, modify permissions, or contact third parties without appropriate authorization.
-- Keep private data and credentials out of public examples.
-- When uncertain, label uncertainty and preserve original source material.
+## Acceptance scenario
+**Given:** A draft adds invented credentials or an unearned testimonial: remove the claim and flag it.
+
+**Then:** The workflow preserves the facts and produces a checkable result, with any missing evidence labeled explicitly.
+
+## Failure and privacy handling
+On tool failure or timeout, inspect destination state before retrying. Keep private data and credentials out of public examples. Preserve source attribution and do not redistribute third-party copyrighted skill content. External actions require the authorization appropriate to their consequences.
 
 ## Evaluation
-- Output is grounded in supplied inputs.
-- A reviewer can inspect the provenance and reproduce the workflow.
-- The result reduces user effort without suppressing user agency.
+A reviewer should be able to reproduce the steps, inspect the evidence, and distinguish completed work from a draft. Passing this specification review does not constitute a live integration test.
