@@ -69,3 +69,6 @@ Pass only if the operator can (a) identify the claim, (b) inspect evidence, (c) 
 
 ## Boundaries
 This skill is an instruction contract, not a background daemon or an assurance of cross-platform execution. The host agent must have appropriate tools and permissions.
+
+## Output contract
+Return the objective, actions actually performed, artifact or evidence references, verification result, unresolved blockers, and next authorized action. Label unverified outcomes explicitly; never report a specification as an executed integration.
