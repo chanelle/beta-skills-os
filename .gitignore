@@ -3,3 +3,10 @@
 .env.*
 __pycache__/
 *.pyc
+.beta/
+*.db
+*.db-wal
+*.db-shm
+.env
+out/
+__pycache__/
