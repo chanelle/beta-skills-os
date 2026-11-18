@@ -4,9 +4,11 @@
 
 **Reusable intelligence. Verifiable action.**
 
+> **Build status:** Actively developing. Thirteen skill definitions are now published. The Verify Gate specification has been expanded with acceptance scenarios, and release criteria are documented. These are **not** yet certified integrations or production-tested automations.
+
 A public, evolving collection of reusable AI-agent workflows developed from Chanelle Henry’s work across UX, AI, systems design, research, and accountability.
 
-> **Release status:** v0.1.0 starter collection. These are structured skill drafts, not claims of production-tested automations or universal cross-platform compatibility.
+> **Release status:** v0.1.0 foundation with ongoing v0.2 development. These are structured skill drafts, not claims of production-tested automations or universal cross-platform compatibility.
 
 ## Skills
 
@@ -22,6 +24,16 @@ A public, evolving collection of reusable AI-agent workflows developed from Chan
 | [`publish-pipeline`](skills/publish-pipeline/SKILL.md) | Move approved ideas through drafting, editorial QA, and channel-specific publishing. | Chanelle-originated workflow concept |
 | [`design-director`](skills/design-director/SKILL.md) | Direct visual work through a coherent design system and measurable QA. | Chanelle-originated workflow concept |
 | [`agent-authority-audit`](skills/agent-authority-audit/SKILL.md) | Audit intended, configured, and observed authority of AI agents. | Chanelle-originated workflow concept |
+
+| [`case-executor`](skills/case-executor/SKILL.md) | Advance a real-world case through preparation, authorized execution, and verified resolution. | Chanelle-originated workflow concept |
+| [`squeaky-wheel`](skills/squeaky-wheel/SKILL.md) | Escalate documented complaints proportionately and track actual remedies. | Chanelle-originated workflow concept |
+| [`council-protocol`](skills/council-protocol/SKILL.md) | Coordinate ChatGPT, Claude, Kai and other agents with explicit handoffs and permissions. | Chanelle-originated workflow concept |
+
+## Evidence and release quality
+
+- [Verify Gate acceptance scenarios](tests/verify-gate.md)
+- [Release criteria and maturity levels](docs/RELEASE-CRITERIA.md)
+- A published skill definition is not proof of installed, tested, or autonomous behavior.
 
 ## Philosophy
 
