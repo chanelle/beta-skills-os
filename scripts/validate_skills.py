@@ -6,7 +6,12 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS = ROOT / "skills"
-REQUIRED = ("## Trigger", "## Inputs", "## Procedure", "## Output contract")
+REQUIRED_GROUPS = (
+    ("## Trigger", "## When to invoke"),
+    ("## Inputs", "## Required inputs"),
+    ("## Procedure", "## Workflow"),
+    ("## Output contract", "## Output schema"),
+)
 EXPECTED = {
     "agent-authority-audit", "brain-to-skill", "chanelle-voice",
     "deep-research", "design-director", "publish-pipeline",
@@ -35,9 +40,9 @@ def validate():
             errors.append(f"{slug}: name does not match folder")
         if not re.search(r"(?m)^description:\s*\S+", front):
             errors.append(f"{slug}: missing description")
-        for section in REQUIRED:
-            if section not in content:
-                errors.append(f"{slug}: missing {section}")
+        for aliases in REQUIRED_GROUPS:
+            if not any(section in content for section in aliases):
+                errors.append(f"{slug}: missing one of {aliases}")
         if not re.search(r"\*\*Version:\*\*\s*\d+\.\d+\.\d+", content):
             errors.append(f"{slug}: missing semantic version")
     for missing in sorted(EXPECTED - found):
