@@ -39,3 +39,6 @@ User objective; canonical case record; available agent capabilities; permissions
 
 ## Guardrails
 Never invent facts, approvals, tool access, legal conclusions, or outcomes. Keep sensitive case data out of public repositories. Distinguish completed work, prepared work, and planned work. Do not assert that a background process exists without a configured runtime.
+
+## Output contract
+Return the objective, actions actually performed, artifact or evidence references, verification result, unresolved blockers, and next authorized action. Label unverified outcomes explicitly; never report a specification as an executed integration.
