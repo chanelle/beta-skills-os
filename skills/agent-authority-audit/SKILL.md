@@ -5,30 +5,34 @@ description: Audit intended, configured, and observed authority of AI agents.
 
 # Agent Authority Audit
 
-> Status: Starter draft; not validated in production. Version 0.1.0.
-
-## Purpose
-Audit intended, configured, and observed authority of AI agents.
+**Version:** 0.2.0 · **Maturity:** Specification, not yet platform-tested. **Provenance:** Chanelle-originated workflow specification.
 
 ## Trigger
-Use when the user explicitly requests this workflow or when it directly reduces work on an authorized task.
+Use when explicitly requested or necessary to complete a previously authorized task. Do not infer permission to publish, send, or modify accounts from casual mentions.
 
 ## Inputs
-Agent instructions, granted permissions, logs, test scenarios.
+Agent instructions, configured permissions, logs, controlled scenarios, expected policy.
 
 ## Procedure
-Map authority boundaries; run controlled tests; distinguish intended/configured/observed behavior; report evidence, limitations, and remediation.
+1. Inventory tools and trust boundaries.
+2. Distinguish intended/configured/observed authority.
+3. Design benign test scenarios.
+4. Record each invocation and actual effect.
+5. Identify overbroad scopes and bypasses.
+6. Rate findings by impact and reproducibility.
+7. Recommend least-privilege controls.
+8. Retest after changes..
 
 ## Output contract
-Provide a concise result, evidence or provenance, unresolved questions, and exactly one next action when needed. Distinguish completed work from suggestions.
+Return the deliverable, source/evidence references, version, actual completion status, unresolved blockers, and only the decision genuinely required from the user. Never report a proposed action as performed.
 
-## Guardrails
-- Do not invent sources, integrations, approvals, outcomes, or prior execution.
-- Do not publish, send, purchase, modify permissions, or contact third parties without appropriate authorization.
-- Keep private data and credentials out of public examples.
-- When uncertain, label uncertainty and preserve original source material.
+## Acceptance scenario
+**Given:** An agent claims it can send email but the connector only drafts: report configured capability accurately and fail the sending scenario.
+
+**Then:** The workflow preserves the facts and produces a checkable result, with any missing evidence labeled explicitly.
+
+## Failure and privacy handling
+On tool failure or timeout, inspect destination state before retrying. Keep private data and credentials out of public examples. Preserve source attribution and do not redistribute third-party copyrighted skill content. External actions require the authorization appropriate to their consequences.
 
 ## Evaluation
-- Output is grounded in supplied inputs.
-- A reviewer can inspect the provenance and reproduce the workflow.
-- The result reduces user effort without suppressing user agency.
+A reviewer should be able to reproduce the steps, inspect the evidence, and distinguish completed work from a draft. Passing this specification review does not constitute a live integration test.
