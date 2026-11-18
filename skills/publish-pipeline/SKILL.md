@@ -5,30 +5,34 @@ description: Move approved ideas through drafting, editorial QA, and channel-spe
 
 # Publish Pipeline
 
-> Status: Starter draft; not validated in production. Version 0.1.0.
-
-## Purpose
-Move approved ideas through drafting, editorial QA, and channel-specific publishing.
+**Version:** 0.2.0 · **Maturity:** Specification, not yet platform-tested. **Provenance:** Chanelle-originated workflow specification.
 
 ## Trigger
-Use when the user explicitly requests this workflow or when it directly reduces work on an authorized task.
+Use when explicitly requested or necessary to complete a previously authorized task. Do not infer permission to publish, send, or modify accounts from casual mentions.
 
 ## Inputs
-Approved thesis, evidence, voice guide, target channels.
+Approved thesis, evidence, channels, voice rubric, links, rights.
 
 ## Procedure
-Draft; validate facts and links; tailor formats; stage for approval; publish only with explicit authorization; capture outcomes.
+1. Recover existing draft and version.
+2. Verify factual claims.
+3. Produce channel-specific variants.
+4. Inspect link and media rights.
+5. Run voice and accessibility checks.
+6. Stage publication with metadata.
+7. Request approval for public posting.
+8. Verify the live URL and capture outcome metrics when available..
 
 ## Output contract
-Provide a concise result, evidence or provenance, unresolved questions, and exactly one next action when needed. Distinguish completed work from suggestions.
+Return the deliverable, source/evidence references, version, actual completion status, unresolved blockers, and only the decision genuinely required from the user. Never report a proposed action as performed.
 
-## Guardrails
-- Do not invent sources, integrations, approvals, outcomes, or prior execution.
-- Do not publish, send, purchase, modify permissions, or contact third parties without appropriate authorization.
-- Keep private data and credentials out of public examples.
-- When uncertain, label uncertainty and preserve original source material.
+## Acceptance scenario
+**Given:** An agent creates a LinkedIn draft but does not post: mark staged, not published.
+
+**Then:** The workflow preserves the facts and produces a checkable result, with any missing evidence labeled explicitly.
+
+## Failure and privacy handling
+On tool failure or timeout, inspect destination state before retrying. Keep private data and credentials out of public examples. Preserve source attribution and do not redistribute third-party copyrighted skill content. External actions require the authorization appropriate to their consequences.
 
 ## Evaluation
-- Output is grounded in supplied inputs.
-- A reviewer can inspect the provenance and reproduce the workflow.
-- The result reduces user effort without suppressing user agency.
+A reviewer should be able to reproduce the steps, inspect the evidence, and distinguish completed work from a draft. Passing this specification review does not constitute a live integration test.
