@@ -72,8 +72,13 @@ def add_task(conn, project, title, *, priority=3, acceptance=None, permission_sc
              json.dumps(acceptance or [])))
         for d in depends_on:
             conn.execute("INSERT INTO task_dependencies VALUES (?,?)", (tid, d))
-        _transition(conn, tid, "blocked" if depends_on else status, "system",
-                    "waiting on dependencies" if depends_on else "created")
+        dependencies_ready = not depends_on or all(
+            conn.execute("SELECT status FROM tasks WHERE id=?", (d,)).fetchone()["status"] == "verified"
+            for d in depends_on
+        )
+        target = status if dependencies_ready else "blocked"
+        _transition(conn, tid, target, "system",
+                    "created" if dependencies_ready else "waiting on dependencies")
         conn.execute("COMMIT")
     except Exception:
         conn.execute("ROLLBACK")
@@ -88,6 +93,7 @@ def approve(conn, task_id, by, scope=""):
         st = conn.execute("SELECT status FROM tasks WHERE id=?", (task_id,)).fetchone()["status"]
         if st == "needs_approval":
             _transition(conn, task_id, "ready", by, "approved")
+        _unblock(conn)
         conn.execute("COMMIT")
     except Exception:
         conn.execute("ROLLBACK")
@@ -98,24 +104,38 @@ def release_expired_leases(conn):
     """Crash recovery: a running task whose lease expired goes back to ready (state preserved)."""
     rows = conn.execute("SELECT id, lease_owner FROM tasks WHERE status='running' AND lease_expires_at < ?",
                         (db.now(),)).fetchall()
+    recovered = []
     for r in rows:
         conn.execute("BEGIN IMMEDIATE")
         try:
+            # Re-read after acquiring the write lock. A different worker may have
+            # recovered and re-claimed this task since the optimistic scan above.
+            current = conn.execute(
+                "SELECT lease_owner, lease_expires_at FROM tasks WHERE id=? AND status='running'", (r["id"],)
+            ).fetchone()
+            if (current is None or current["lease_owner"] != r["lease_owner"]
+                    or current["lease_expires_at"] is None or current["lease_expires_at"] >= db.now()):
+                conn.execute("ROLLBACK")
+                continue
             _transition(conn, r["id"], "ready", "watchdog", f"lease expired (was {r['lease_owner']})",
                         "lease_owner=NULL, lease_expires_at=NULL, retry_count=retry_count+1")
             conn.execute("COMMIT")
+            recovered.append(r["id"])
         except TransitionError:
             conn.execute("ROLLBACK")
-    return [r["id"] for r in rows]
+    return recovered
 
 
 def _unblock(conn):
-    rows = conn.execute("""SELECT t.id FROM tasks t WHERE t.status='blocked' AND NOT EXISTS (
+    rows = conn.execute("""SELECT t.id, t.permission_scope FROM tasks t WHERE t.status='blocked' AND NOT EXISTS (
         SELECT 1 FROM task_dependencies d JOIN tasks u ON u.id=d.depends_on
         WHERE d.task_id=t.id AND u.status!='verified')
         AND EXISTS (SELECT 1 FROM task_dependencies d WHERE d.task_id=t.id)""").fetchall()
     for r in rows:
-        _transition(conn, r["id"], "ready", "system", "dependencies verified")
+        approved = conn.execute("SELECT 1 FROM approvals WHERE task_id=?", (r["id"],)).fetchone() is not None
+        target = "ready" if r["permission_scope"] == "reversible" or approved else "needs_approval"
+        note = "dependencies verified" if target == "ready" else "dependencies verified; approval required"
+        _transition(conn, r["id"], target, "system", note)
 
 
 def claim(conn, agent, task_id=None, lease_seconds=LEASE_SECONDS):
@@ -149,11 +169,16 @@ def heartbeat(conn, task_id, agent, lease_seconds=LEASE_SECONDS):
 
 def complete(conn, task_id, agent, output_refs):
     """Agent says it's done. That is a CLAIM, so the task moves to 'verification', not 'verified'."""
-    row = conn.execute("SELECT lease_owner FROM tasks WHERE id=?", (task_id,)).fetchone()
-    if row is None or row["lease_owner"] != agent:
-        raise TransitionError(f"{agent} does not hold the lease on {task_id}")
     conn.execute("BEGIN IMMEDIATE")
     try:
+        # Ownership must be checked under the same write lock as the transition.
+        # Otherwise a recovered worker can complete a newer worker's lease.
+        row = conn.execute(
+            "SELECT lease_owner, lease_expires_at FROM tasks WHERE id=? AND status='running'", (task_id,)
+        ).fetchone()
+        if (row is None or row["lease_owner"] != agent or row["lease_expires_at"] is None
+                or row["lease_expires_at"] < db.now()):
+            raise TransitionError(f"{agent} does not hold a valid lease on {task_id}")
         _transition(conn, task_id, "verification", agent, "agent reported completion",
                     "output_refs=?, lease_owner=NULL, lease_expires_at=NULL", (json.dumps(output_refs),))
         conn.execute("UPDATE executions SET finished_at=?, outcome='claimed_done' WHERE task_id=? AND finished_at IS NULL",

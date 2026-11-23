@@ -115,6 +115,30 @@ class TestNegative(Base):
         engine.approve(self.conn, t, "chanelle")
         self.assertEqual(engine.claim(self.conn, "kai"), t)
 
+    def test_verified_dependencies_do_not_bypass_approval(self):
+        dependency = engine.add_task(self.conn, "demo", "prepare", acceptance=self.art("prepare.md"))
+        engine.claim(self.conn, "claude", dependency)
+        (self.dir / "prepare.md").write_text("done")
+        engine.complete(self.conn, dependency, "claude", ["prepare.md"])
+        engine.verify_task(self.conn, dependency, base=self.dir)
+        external = engine.add_task(self.conn, "demo", "publish", permission_scope="external",
+                                   acceptance=[{"check": "manual_approval"}], depends_on=[dependency])
+        self.assertEqual(self.conn.execute("SELECT status FROM tasks WHERE id=?", (external,)).fetchone()["status"],
+                         "needs_approval")
+        self.assertIsNone(engine.claim(self.conn, "kai", external))
+        engine.approve(self.conn, external, "chanelle")
+        self.assertEqual(engine.claim(self.conn, "kai", external), external)
+
+    def test_add_task_unblocks_when_dependencies_already_verified(self):
+        dependency = engine.add_task(self.conn, "demo", "prepare", acceptance=self.art("prepare.md"))
+        engine.claim(self.conn, "claude", dependency)
+        (self.dir / "prepare.md").write_text("done")
+        engine.complete(self.conn, dependency, "claude", ["prepare.md"])
+        engine.verify_task(self.conn, dependency, base=self.dir)
+        dependent = engine.add_task(self.conn, "demo", "next", acceptance=self.art("next.md"), depends_on=[dependency])
+        self.assertEqual(self.conn.execute("SELECT status FROM tasks WHERE id=?", (dependent,)).fetchone()["status"],
+                         "ready")
+
     def test_non_lease_holder_cannot_complete(self):
         t = engine.add_task(self.conn, "demo", "x", acceptance=self.art())
         engine.claim(self.conn, "claude", t)
