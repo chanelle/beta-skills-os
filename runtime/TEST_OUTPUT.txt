@@ -1,0 +1,4 @@
+Ran 15 tests in 0.243s
+
+OK
+PASS: 13 skill definitions, frontmatter, sections, versions and core assets
