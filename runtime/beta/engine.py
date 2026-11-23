@@ -9,7 +9,7 @@ ALLOWED = {
     "queued": {"ready", "blocked", "needs_approval", "failed"},
     "ready": {"running", "blocked", "needs_approval", "failed"},
     "running": {"verification", "blocked", "failed", "ready"},  # ready = lease expired, re-queued
-    "blocked": {"ready", "failed"},
+    "blocked": {"ready", "needs_approval", "failed"},
     "needs_approval": {"ready", "failed"},
     "verification": {"verified", "failed", "running"},
     "verified": set(),

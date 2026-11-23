@@ -13,6 +13,11 @@ from . import db, engine
 STATE = os.environ.get("BETA_DB", ".beta/state.db")
 
 
+def _close_and_return(conn, code=0):
+    conn.close()
+    return code
+
+
 def _ts(x):
     return datetime.fromtimestamp(x).strftime("%Y-%m-%d %H:%M") if x else "-"
 
@@ -61,16 +66,16 @@ def main(argv=None):
                 print(f"{r['id']}  {r['status']:<14} p{r['priority']}  {r['owner'] or '-':<10} {r['title']}")
         elif a.sub == "claim":
             tid = engine.claim(conn, a.agent, a.id)
-            print(tid or "nothing ready"); return 0 if tid else 3
+            print(tid or "nothing ready"); return _close_and_return(conn, 0 if tid else 3)
         elif a.sub == "heartbeat":
-            ok = engine.heartbeat(conn, a.id, a.agent); print("ok" if ok else "lease lost"); return 0 if ok else 4
+            ok = engine.heartbeat(conn, a.id, a.agent); print("ok" if ok else "lease lost"); return _close_and_return(conn, 0 if ok else 4)
         elif a.sub == "complete":
             engine.complete(conn, a.id, a.agent, a.evidence); print("awaiting verification")
         elif a.sub == "verify":
             ok, res = engine.verify_task(conn, a.id, base=a.base, network=a.network)
             for r in res:
                 print(f"  [{'PASS' if r['passed'] else 'FAIL'}] {r['check']}: {r['detail']}")
-            print("VERIFIED" if ok else "FAILED"); return 0 if ok else 1
+            print("VERIFIED" if ok else "FAILED"); return _close_and_return(conn, 0 if ok else 1)
         elif a.sub == "fail":
             engine.fail(conn, a.id, a.actor, a.error); print("failed")
         elif a.sub == "retry":
@@ -88,8 +93,10 @@ def main(argv=None):
         if a.out == "-":
             print(data)
         else:
-            open(a.out, "w").write(data); print(f"wrote {a.out}")
-    return 0
+            with open(a.out, "w") as out:
+                out.write(data)
+            print(f"wrote {a.out}")
+    return _close_and_return(conn)
 
 
 if __name__ == "__main__":

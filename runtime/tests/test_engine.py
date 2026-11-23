@@ -139,6 +139,18 @@ class TestNegative(Base):
         self.assertEqual(self.conn.execute("SELECT status FROM tasks WHERE id=?", (dependent,)).fetchone()["status"],
                          "ready")
 
+    def test_dependency_unblock_keeps_external_task_pending_approval(self):
+        dependency = engine.add_task(self.conn, "demo", "prepare", acceptance=self.art("prepare.md"))
+        external = engine.add_task(self.conn, "demo", "publish", permission_scope="external",
+                                   acceptance=[{"check": "manual_approval"}], depends_on=[dependency])
+        engine.claim(self.conn, "claude", dependency)
+        (self.dir / "prepare.md").write_text("done")
+        engine.complete(self.conn, dependency, "claude", ["prepare.md"])
+        engine.verify_task(self.conn, dependency, base=self.dir)
+        self.assertEqual(self.conn.execute("SELECT status FROM tasks WHERE id=?", (external,)).fetchone()["status"],
+                         "needs_approval")
+        self.assertIsNone(engine.claim(self.conn, "kai", external))
+
     def test_non_lease_holder_cannot_complete(self):
         t = engine.add_task(self.conn, "demo", "x", acceptance=self.art())
         engine.claim(self.conn, "claude", t)
@@ -155,6 +167,14 @@ class TestNegative(Base):
         self.assertEqual(row["owner"], "claude")
         hist = [h["note"] for h in self.conn.execute("SELECT note FROM transitions WHERE task_id=?", (t,))]
         self.assertTrue(any("lease expired" in h for h in hist))
+
+    def test_recovered_lease_rejects_old_worker_completion(self):
+        t = engine.add_task(self.conn, "demo", "x", acceptance=self.art())
+        engine.claim(self.conn, "old-worker", t, lease_seconds=0.05)
+        time.sleep(0.1)
+        self.assertEqual(engine.claim(self.conn, "new-worker"), t)
+        with self.assertRaises(engine.TransitionError):
+            engine.complete(self.conn, t, "old-worker", ["out.md"])
 
     def test_illegal_transition_rejected(self):
         t = engine.add_task(self.conn, "demo", "x", acceptance=self.art())
