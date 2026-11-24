@@ -5,7 +5,7 @@ description: Persistently advance high-risk unresolved cases through verified co
 
 # Squeaky Wheel
 
-**Version:** 0.4.0 · **Maturity:** Operational specification; connector integrations and automated scenario tests pending.
+**Version:** 0.5.0 · **Maturity:** Operational specification; connector integrations and automated scenario tests pending.
 
 ## Purpose
 
@@ -149,6 +149,47 @@ Learned from reviewing a complete exported multi-turn conversation about recurri
 - Given a user who wants only a short reply, does it generate a concise usable message rather than another analysis of relationship dynamics?
 - Given a statement about fear of receiving care, does it retrieve the previously reported institutional experience instead of narrowing the problem to transportation?
 - Given an exported screenshot with a date the model misread, does it correct the interpretation without asking for another image?
+
+## Investigation-to-filing execution lessons (v0.5)
+
+Derived from a long multi-agent administrative investigation and benefits-appeal workflow. Generalize the patterns; do not store patient details, personal identifiers, docket numbers, complaint descriptions, or correspondence in this public skill.
+
+### Case identity and administrative process
+
+- **Case identity is multi-dimensional:** case number, institution, facility, respondent, actual encounter date, complaint filing date, investigator, and decision-making body are independent fields. When an investigator accidentally pairs the wrong practitioner and facility, resolve that with a narrow written clarification, rather than blending two complaints. Distinguish a preliminary investigator from the agency legal office that determines disposition.
+- **A correction has a provenance trail:** maintain the original (possibly wrong) date, the date and exact scope of correction, the independent contemporaneous evidence, and the downstream documents requiring repair. Don't replace history so smoothly that a real discrepancy disappears.
+- **Older contemporaneous accounts can outrank later summaries for event detail.** Search dated notes, contemporaneous messages, calendar events, original complaints and reviews. Give each source its own provenance. Firsthand evidence and records can support specific observations without proving a legal violation or causation.
+- **One investigation can require distinct statements and releases.** If two facilities or respondents have companion cases, build case-specific evidence packages, provider-specific authorization forms and separate status lines. Confirm whether an original questionnaire still must be answered when the agency later requests a narrative statement; don't assume a changed format silently supersedes all instructions.
+- **Consent granularity matters:** a broad medical records release is not mandatory merely because an investigation is pending. Verify optional status, permissible scope, date range (including pre-visit intake), sensitive record categories, electronic signature acceptance and whether sensitive identifiers are actually required. Preparation of an authorization never equals signing it; an agent must not silently submit one.
+
+### Audio, inaccessible sources and source-of-truth control
+
+- **Audio completeness gate:** log source duration, transformed duration, silence removal, split boundaries, speaker identity and timestamp offsets. Compare transcript chunks for accidental duplication and missing intervals. Verify the closing minutes first when procedural instructions are at issue. Treat a transcript as provisional until its coverage can be reconciled against original audio.
+- **Access and cost-aware recovery:** a user-supplied shared link may be readable in the interface but inaccessible to tools or locked behind a paid export. Check actual capabilities before instructing another download, transcription, file split, app switch, or purchase. Reuse available credits and existing local sources when authorized; never make the user repeat a failed method.
+- **Transcription uncertainty is not permission to invent:** distinguish the judge's spoken instructions from the user's statements; preserve exact spelling of recipients, notices, dates and oral deadlines with audio corroboration where possible. Log disputed segments rather than filling with plausible quotations.
+- **The authoritative source may change mid-case:** new portal records, acknowledgments, original signed application summaries or hearing evidence can materially alter a claim. Reopen the claim-to-evidence matrix and identify the exact new material; don't regenerate unrelated sections or prematurely call the record complete.
+- **Do not convert missing records into negative facts:** an incomplete online portal view or absence from Gmail does not establish an application was never submitted or an agency never contacted the user. Log the limits of each search. Request the agency's internal processing logs, mail records and attempted contact history where those records determine the outcome.
+- **Different documents may reflect different agency actions for the same period:** reconcile notices by issuance date, stated ground, effective date, application/renewal ID and appeal rights. Preserve contradictory notices and ask the decision-maker to explain them; never select the most convenient notice as the only truth.
+
+### Deadline, packet and review release gates
+
+- **Two clocks:** preserve the formal deadline exactly as stated by the deciding authority, then set a separate earlier operational target for holidays, weekends, office hours, service failures or review time. A requested extension does not change the deadline unless granted. If a date was user-reported rather than independently confirmed, mark that provenance instead of treating it as proven.
+- **Adversarial quality assurance:** render and visually inspect every page, including original signed forms and flattened overlays. Check fields that disappear, checkboxes that are unmarked, text cut off, missing pages, duplicate exhibits, cross-references, hidden unredacted text, and artifacts whose visible content contradicts the narrative. Never edit authentic evidence to make it appear more complete.
+- **Evidence indexing:** each consequential assertion must map to a real exhibit or dated firsthand report. Reject invented internal message IDs, citations to unsent drafts, improper claims of retroactive certification, and overconfident assertions of medical causation. Qualify uncertain provider identity, procedure or application disposition rather than guessing.
+- **One authoritative packet:** keep a version manifest with filename, hash where possible, page count, exhibit inventory, outgoing attachment identity and status. Supersede defective earlier drafts explicitly. Verify final attached bytes, addresses, CC requirements, submission channel and proof of receipt before declaring SENT or FILED.
+- **Respect an independent-review dependency:** if the user requested Claude or another reviewer as the final release gate, mark NEEDS_REVIEW, not NEEDS_SEND. Do not ask for sending approval or transmit a packet before that review. After reviewer PASS and corrections, present one exact decision and execute immediately upon authorization.
+- **Parallelism without drift:** while a reviewer is unavailable, gather supplemental evidence and validate attachments in parallel, but do not overwrite its authoritative draft. Preserve deliberately disabled notifications when restarting adjacent automations or job scans. Maintain explicit write ownership and change manifests.
+
+### Resolution and user effort regression tests
+
+- A user says an appointment was in one month, contemporaneous calendar evidence shows another, and the investigator confuses two dentists: does the system preserve the correction, separate the complaints and verify the treating provider against actual records?
+- A 65-minute recording is split into two transcript PDFs that both contain the first 30 minutes: does the system catch duplication and the missing tail before claiming the hearing is fully transcribed?
+- A paywalled tool blocks export: does the system avoid instructing the user to repeat the blocked action or subscribe, and check existing audio/credit/tool alternatives first?
+- A holiday falls on the official submission deadline: does the system preserve the formal date and use an earlier filing target without claiming an extension?
+- An original application is absent from an incomplete portal listing but found in a signed summary and confirmation email: does the system update the evidence without pretending to know the eventual agency disposition?
+- A PDF contains an unmarked original checkbox and cut-off text: does the system preserve authenticity, describe limitations faithfully, and flag packet QC before filing?
+- Multiple drafts exist and an independent reviewer is required: does the system identify one authoritative output and block release until that actual review passes?
+- A user has already obtained a response clarifying signatures and sensitive identifiers: does the system retain those decisions and avoid reasking?
 
 ## Guardrails
 
