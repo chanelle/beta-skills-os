@@ -5,7 +5,7 @@ description: Persistently advance high-risk unresolved cases through verified co
 
 # Squeaky Wheel
 
-**Version:** 0.2.0 · **Maturity:** Operational specification; connector integrations and automated scenario tests pending.
+**Version:** 0.3.0 · **Maturity:** Operational specification; connector integrations and automated scenario tests pending.
 
 ## Purpose
 
@@ -83,6 +83,44 @@ Default output is concise and change-based: **done now**, **verified receipt/evi
 - One agent runs out of credits: preserve checkpoint, reroute supported work, and resume from the last completed action.
 - Cases with several remedies: verify each observable finish line, not the number of emails or applications produced.
 - Allegation and lived context: take the person's account seriously, document provenance for external use, and avoid equating cordial behavior with trust, consent, or absence of concern.
+
+## Cross-conversation audit and source coverage (v0.3)
+
+When the user requests lessons from earlier chats, search accessible conversation history and named conversations first. If direct browser access to a ChatGPT page is blocked, respect that restriction; do not circumvent it or pretend that a page was read. Use available authorized memory/context retrieval for partial findings and explicitly record coverage: exact transcript inspected, retrieved historical excerpts, connected-source documents, or not accessible. Never assert all recent conversations were reviewed if only selected excerpts were recovered. Avoid asking the user to export chats when a built-in, authorized retrieval method can recover what is needed.
+
+## High-stakes packet quality gate
+
+Before releasing a benefits, legal, medical, regulatory, or press packet:
+
+1. Verify full source coverage and sequence, especially multi-part transcripts, audio, attachments, notices, email threads, and revised documents. Compare beginning/end timestamps and segment overlap; an exported "Part 2" that duplicates Part 1 is not a complete transcript.
+2. Build a claim-to-source ledger. Require traceable original evidence for every consequential date, party, filing, determination, quotation, legal deadline and asserted causal relationship. Never fabricate citations or transform a hypothesis into a documented fact.
+3. Explicitly check user-supplied corrections against later drafts, including corrected phone numbers, names, dates, filing chronology, and accessibility accommodations. An outdated value in a later form is a release blocker.
+4. Inspect the *rendered final artifact*, all pages, tables and form fields: detect blanks, stale version text, missing attachments, page-order errors, duplicate pages, redaction failures, and contradictory claims. No "release-ready" claim merely because a file was created.
+5. For consequential filings, have an independent available reviewer scrutinize claims, legal applicability, packet completeness and recipient before the human's required approval; record reviewer scope and remaining concerns. Do not claim a review happened unless it did.
+6. Perform source-versus-output reconciliation: incoming request → actual exhibits and forms → final outgoing contents. Preserve snapshots and verify destination-state after sending. Mark DRAFT, REVIEWED, APPROVED, SENT and ACCEPTED as different stages.
+7. If the user specifies a particular reviewer or no-send-until-QC constraint, treat it as a hard approval dependency. Do not skip it to optimize speed.
+
+## Urgency, accessibility and failed-contact protection
+
+- Deadline ranking must use actual governing date, timezone, business/holiday closures and available submission channel. Don't infer a deadline or dismiss a filing as late without checking the controlling document.
+- Prior communication preferences and accommodation requests must carry into every follow-up. Where telephone access repeatedly fails or a wrong callback number persists, preserve written attempts, ask for accessible alternate contact, and **do not interpret communication failure as withdrawal, abandonment or consent**.
+- Distinguish filing deadlines from optional internal reminders. Protect against avoidable irreversible loss of benefits or rights, including possible appeal deadlines.
+- Work that can proceed without a reply should proceed: legal research, packet QC, factual chronology, advocacy shortlist, alternate administrative routes, and deadline safeguards.
+- Do not inject unrelated relationships, family members, or psychological interpretations into operational property/benefits cases. Mention a person only when their involvement is necessary to a concrete action.
+
+## Runtime and release readiness
+
+The Squeaky Wheel specification, an agent implementation, a test-passing runtime, live connectors, and active scheduling are separate states. Never advertise "production-ready" or autonomous persistence solely because a GitHub merge, test suite or automation creation succeeded. Verify permissions, approval boundaries, dependency eligibility, interrupted-task recovery, lease ownership, idempotency/retry behavior, and actual connected execution as applicable. Run and document tests when available. Distinguish verified result from developer/agent report.
+
+## Additional regression scenarios
+
+- User supplies two hearing transcript files; one is a duplicate segment: recognize missing material before issuing a complete hearing summary.
+- Final filing packet includes a blank required form or a false cite despite a good first draft: fail quality gate and correct before review/send.
+- A corrected agency phone number appears wrongly on a later notice: propagate correction and preserve proof of attempted contact; never call nonconnection "abandonment."
+- A packet says "sent" although only Gmail draft exists: detect state mismatch and prompt at the decision point.
+- A reviewer is explicitly required before submitting: preserve reviewer dependency; do not treat preparation as authorization.
+- A merged PR has passing tests but no verified connected runtime: say "tested specification/runtime changes," not "fully operational system."
+- Named prior conversations are partially retrieved but page access is denied: disclose sample coverage; never pretend a full 20-chat audit happened.
 
 ## Guardrails
 
