@@ -5,7 +5,7 @@ description: Persistently advance high-risk unresolved cases through verified co
 
 # Squeaky Wheel
 
-**Version:** 0.5.0 · **Maturity:** Operational specification; connector integrations and automated scenario tests pending.
+**Version:** 0.6.0 · **Maturity:** Operational specification; connector integrations and automated scenario tests pending.
 
 ## Purpose
 
@@ -190,6 +190,35 @@ Derived from a long multi-agent administrative investigation and benefits-appeal
 - A PDF contains an unmarked original checkbox and cut-off text: does the system preserve authenticity, describe limitations faithfully, and flag packet QC before filing?
 - Multiple drafts exist and an independent reviewer is required: does the system identify one authoritative output and block release until that actual review passes?
 - A user has already obtained a response clarifying signatures and sensitive identifiers: does the system retain those decisions and avoid reasking?
+
+## Opportunity-to-outcome operating loop (v0.6)
+
+Learned from a long, user-supplied historical opportunity-assessment export. Do not publish private correspondence, employment records, financial documents or personal profiles in this skill.
+
+### Intake, triage and application
+- **One intake, multiple opportunity types:** Jobs, consulting, paid research, studies, grants, residencies, speaking, challenges and referral opportunities use a shared pipeline but distinct eligibility and submission requirements. Ingest a single URL or screenshot; research the real current posting before assessing it.
+- **Give verdicts that are mathematically reproducible:** An initial impression and a later weighted score must not conflict silently. Fix score math or explicitly supersede the old headline. The five-factor default weights are compensation/benefits 30%, likelihood or evidence of selection/payment 20%, time/energy 20%, career/goal alignment 20%, credibility/risk 10%; subjective fit scores are not acceptance probabilities.
+- **Verify offer details and user eligibility independently:** Distinguish advertised versus contractual compensation, actual earnings versus possible earnings, role seniority versus fascinating domain language, program dates versus application deadlines, and short-term funded stays versus viable permanent relocation. Re-check published-book, geographic, insurance, income and work-authorization gates against existing verified user records before asking the user.
+- **Protect scarce attention without suppressing opportunities:** Maintain a *broad* eligible pipeline, rather than withholding listings to prevent overwhelm. Automate discovery and prep in parallel, present only urgent or decision-requiring items. Apply a capped effort budget to low-value or uncertain screening; do not imply that lower-pay work has no value when immediate income is the priority.
+- **One-click application packet objective:** After a PURSUE decision, reuse the evidence library, saved resume versions, work samples, referrals, contacts and prior answers to generate a target-specific, ready-to-submit packet. Use the user's intended tone, accurate claims, field limits, required format and design style. If a site accepts only uploaded documents, prepare and visually check the PDF instead of asking for manual conversion.
+- **Use existing ledgers:** Treat the established Worth My Time? opportunity records and any connected Job Tracker, People/Connections, Evidence, Activities and Outcomes as a coordinated system; deduplicate by actual posting/program and application ID. Do not create a new tracker or require users to re-upload a known connections file before retrieval attempts.
+- **Keep status transitions truthful:** FOUND → VERIFIED → ELIGIBLE/CONDITIONAL → PREPARING → APPROVAL_REQUIRED → SUBMITTED → SCREENING/INTERVIEW → OFFER/REJECTED/WITHDRAWN → PAID/FINAL. Independent applications to the same employer remain distinct; a rejection from one program must never be copied onto a different pending application.
+- **Follow-through includes receipts:** Verify actual application submission, confirmation number, outbound recruiter emails, screening invitations, next-stage deadlines, payment approval and payout. Distinguish 'completed study', 'approved incentive' and 'money collected'. A $20 unpaid completed study is a recoverable claim, not zero effort simply because its face value is small.
+- **Use the existing professional network as optional leverage:** Query accessible contacts and prior correspondence to find genuine introductions, but don't invent familiarity. Track whether outreach occurred; never redo a nine-agency campaign merely because an older page still says 'pitch three'.
+- **Security and economic costs:** Full-screen recording, unpaid auditions, identity/likeness rights, NDA restrictions, broad data disclosure, up-front fees and tax/public-benefits implications are distinct gates. Verify the need for a W-9/tax-return alternative and avoid exposure of unrelated health and personal information.
+- **Allowed AI use is task-specific:** Respect restrictions against AI-generated assessment answers; using AI to research or prepare materials does not establish authorization to complete a prohibited evaluation. In settings that expressly permit AI, match answers to the person's true experience and tone without inventing qualifications.
+- **Do not confuse an interesting prototype with a viable revenue path:** Track immediate cash flow separately from medium-term career leverage and long-term research or creative projects. A pending fellowship cannot replace near-term income. Record projected dates, cash received and hours spent to compute realized ROI.
+- **Handoff is structured and portable:** When an agent or platform cannot finish a form, preserve official URL, eligibility, exact answers with character limits, evidence links, task state, blocker and required approval for another authorized agent, rather than starting over.
+
+### Opportunity pipeline regression scenarios
+- A listing says $110/hour in a board but $90/hour on the detailed page: preserve both, identify controlling offer, and do not present either as guaranteed pay.
+- A score headline is 8.4 but weighted calculation yields 7.7: explicitly reconcile and choose one authoritative value.
+- An applicant previously submitted a second job at the same employer: retain both separate records; don't withdraw an active application simply because another exists.
+- An agency outreach board says 'start with three' but nine verified outbound messages exist: mark nine submitted and schedule replies, not another nine pitches.
+- A research participant completed work but has no approved payment: monitor the incentive and escalate once through the supported channel, rather than counting projected revenue as collected.
+- The user says a short application should be generated in their voice: deliver complete paste-ready or upload-ready fields with limits checked, rather than a résumé redesign or generic guidance.
+- A fellowship fits creatively but starts in 2028 and has a mandatory published-book requirement: check actual eligibility and horizon before allowing it to compete with immediate funded exit opportunities.
+- An application or test forbids AI assistance: do not compose restricted answers or misrepresent participation; continue permissible prep only.
 
 ## Guardrails
 
