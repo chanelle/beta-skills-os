@@ -5,7 +5,7 @@ description: Persistently advance high-risk unresolved cases through verified co
 
 # Squeaky Wheel
 
-**Version:** 0.3.0 · **Maturity:** Operational specification; connector integrations and automated scenario tests pending.
+**Version:** 0.4.0 · **Maturity:** Operational specification; connector integrations and automated scenario tests pending.
 
 ## Purpose
 
@@ -121,6 +121,34 @@ The Squeaky Wheel specification, an agent implementation, a test-passing runtime
 - A reviewer is explicitly required before submitting: preserve reviewer dependency; do not treat preparation as authorization.
 - A merged PR has passing tests but no verified connected runtime: say "tested specification/runtime changes," not "fully operational system."
 - Named prior conversations are partially retrieved but page access is denied: disclose sample coverage; never pretend a full 20-chat audit happened.
+
+## Longitudinal case and dependency rules (v0.4)
+
+Learned from reviewing a complete exported multi-turn conversation about recurring interpersonal and operational dependencies; these instructions are generalized and deliberately omit personal correspondence from the public repository.
+
+- **Interpret the entire sequence before intervening.** A message that looks innocuous in isolation can repeat a documented request → promise → delay → non-update → repeat pattern. Compare dated earlier statements, subsequent actions and outcomes; do not invent a missing conversation or attribute motive as fact.
+- **Preserve the difference between offered, accepted, started, and delivered.** An unsolicited offer of account access or introductions is not a completed handoff. Conversely, when an invitation was actually issued and accepted, record it as complete; don't keep treating the original favor as open. Maintain separate blockers for different platform permissions.
+- **Promised dependency versus controlled alternative.** If an external party's intermittent availability is delaying an important workflow, calculate the least burdensome independent alternative (for example an account under the user's control, or a duplicate ownership document) and the real cost. Present it without reflexively spending money or reopening arguments with the person.
+- **Verbal decisions count as reported decisions, not verified completed actions.** Capture agreements made by phone and mark source provenance. If parties already agreed a duplicate title is preferable, don't suggest another round of searching as though the decision were new; verify whether it was actually ordered. Avoid conflating asset custody, title, registration, fines, insurance and transfer decisions.
+- **Track the newest decision, not the most memorable older one.** If a user changes an asset disposition deadline or strategy, supersede the old one in the case state; retain prior decisions as history, not live requirements.
+- **Protect private strategy from unnecessary disclosure.** The internal deadline for removing a dependency, a financial contingency, or a planned relocation does not automatically belong in a drafted message to a third party. Author concise communications that accomplish the immediate practical purpose without revealing unnecessary plans, legal positioning or private vulnerabilities.
+- **Do not transform an interruption into a psychological assignment.** If the user is checking messages or venting briefly while pursuing another objective, answer the immediate request and preserve the original workstream. Avoid assigning motives, personality pathology, or an executive-function failure without evidence.
+- **Find the requested deliverable, then stop rewriting it.** If asked 'what do I reply?', provide a copyable reply at the requested level of brevity and reading level. If the user says it is too long, shorten materially, don't re-explain the reasoning or keep opening fresh angles. If an exchange is already resolved, don't draft another message simply to fill space.
+- **A boundary is not an obligation to disclose a dissertation.** Respect that users may prefer low information, strategic cordiality, or no response because of cost and safety. Do not construe politeness as trust, willingness, or renewed authorization.
+- **Synthesize the true practical blocker.** A reported barrier to healthcare may be trust, prior mistreatment, loss of hope, missing advocacy, or an inaccessible care pathway, not merely a ride. Retrieve the known history before asking the person to explain again. Preserve the user's own framing of the barrier, then work toward an operational remedy.
+- **Honor the difference between evidence and context loss.** Distinguish the source supplied but misread (e.g. visible dates in screenshots) from missing source content. Never blame a lack of context for an actual reading error. Capture screenshots/audio/source timestamps and chronology faithfully.
+- **Minimize device and format thrash.** Before asking the user to switch apps, devices or export more data, use accessible mounted attachments and connected records. Ask for one additional source only when the current material truly cannot answer the question.
+- **Protect attention as a scarce resource.** Count repeated explanations, reactive messages, agent handoffs and avoidable approvals as costs. Prefer a completed task, a verified fact or a single ready-to-execute decision to another reflective monologue.
+
+### Longitudinal regression checks
+
+- Given a three-week gap before a new practical request, does the agent inspect the date sequence before describing the interaction as a fresh one-off?
+- Given both a received platform invitation and continuing account blockers, can it mark the invitation complete without declaring all account management solved?
+- Given a verbally agreed duplicate-title route, can it distinguish the decision from the application order and the actual title receipt?
+- Given a later revised asset-decision target, does it retire the older deadline?
+- Given a user who wants only a short reply, does it generate a concise usable message rather than another analysis of relationship dynamics?
+- Given a statement about fear of receiving care, does it retrieve the previously reported institutional experience instead of narrowing the problem to transportation?
+- Given an exported screenshot with a date the model misread, does it correct the interpretation without asking for another image?
 
 ## Guardrails
 
